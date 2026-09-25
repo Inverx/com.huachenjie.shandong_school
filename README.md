@@ -10,6 +10,40 @@
 
 ---
 
+## Telegram
+
+> 项目更新、版本适配及相关通知优先通过 Telegram 发布。
+
+###  通知频道
+
+**Telegram Channel：**  
+https://t.me/Inverx200
+
+用于发布：
+
+- 项目更新
+- 新版本适配
+- Release 发布
+- 协议变化通知
+- LSPosed 模块更新
+- 重要公告
+
+###  讨论群
+
+**Telegram Group：**  
+https://t.me/Inverx501
+
+用于：
+
+- 问题交流
+- Bug 反馈
+- Android 逆向讨论
+- 协议分析交流
+- LSPosed / Xposed 相关讨论
+
+也可以直接通过 GitHub Issues 提交可复现的问题。
+
+---
 ## 项目简介
 
 本项目面向 **闪动校园 Android 客户端**，主要用于 Android 逆向、网络协议分析及相关工程化研究。
