@@ -1,87 +1,40 @@
-# 闪动校园 Android Hook 工程
+# 闪动校园协议实现
 
 <p align="center">
-  <b>Shandong School · Android Reverse Engineering & LSPosed Hook</b>
+  <b>Shandong School · Android Reverse Engineering & Protocol Analysis</b>
 </p>
 
 <p align="center">
-  面向「闪动校园」Android 客户端的逆向分析、模拟器环境研究与 LSPosed Hook 模块。
+  闪动校园 Android 客户端协议分析与 Python 协议实现，按客户端版本独立维护。
 </p>
-
----
-
-## Telegram
-
-> 项目更新、版本适配及相关通知优先通过 Telegram 发布。
-
-### 通知频道
-
-**Telegram Channel：**
-
-`@Inverx200`
-
-用于发布：
-
-- 项目更新
-- 新版本适配
-- Release 发布
-- Hook 模块更新
-- 兼容性变化
-- 重要公告
-
-### 讨论群
-
-**Telegram Group：**
-
-`@Inverx501`
-
-用于：
-
-- 问题交流
-- Bug 反馈
-- Android 逆向讨论
-- LSPosed / Xposed 相关讨论
-- 模块兼容性交流
-
-也可以直接通过 GitHub Issues 提交可复现的问题。
 
 ---
 
 ## 项目简介
 
-本项目面向 **闪动校园 Android 客户端**，主要用于 Android 逆向、模拟器环境分析及 LSPosed Hook 技术研究。
+本项目主要用于 **闪动校园 Android 客户端** 的逆向分析、网络协议分析及协议工程化研究。
 
-本项目早期曾包含客户端网络协议分析及 Python 协议实现。
-
-目前已经：
-
-```text
-移除早期协议部分
-        ↓
-停止维护 Python CLI
-        ↓
-仅保留 Android Hook 相关内容
-        ↓
-按客户端版本独立维护 LSPosed Hook 模块
-```
-
-当前项目主要用于：
+当前项目仅维护：
 
 ```text
 Android Reverse Engineering
-+
-Dynamic Analysis
-+
-Runtime Observation
-+
-LSPosed / Xposed Hook
-+
-Android Emulator Research
-+
-Version Compatibility Analysis
+Network Protocol Analysis
+Protocol Reconstruction
+Cryptographic Algorithm Analysis
+Python Protocol Implementation
 ```
 
-项目不再维护早期脱离 Android 客户端运行的网络协议实现。
+项目按照客户端版本独立维护，不同版本之间尽量保持解耦，主要用于协议分析、版本差异研究及相关技术交流。
+
+当前版本：
+
+```text
+8.7.2
+8.7.4
+8.7.7
+```
+
+后续将根据客户端版本更新情况继续进行协议分析与适配。
 
 ---
 
@@ -91,276 +44,116 @@ Version Compatibility Analysis
 com.huachenjie.shandong_school/
 │
 ├── 8.7.2/
-│   └── 闪动校园 8.7.2 Hook 模块
+│   └── 闪动校园 8.7.2 协议实现
 │
 ├── 8.7.4/
-│   └── 闪动校园 8.7.4 Hook 模块
+│   └── 闪动校园 8.7.4 协议实现
 │
 ├── 8.7.7/
-│   └── 闪动校园 8.7.7 Hook 模块
+│   └── 闪动校园 8.7.7 协议实现
 │
 ├── LICENSE
 └── README.md
 ```
 
-### 版本目录
-
-每个版本目录对应一个相对独立的客户端版本。
-
-例如：
+不同客户端版本可能存在：
 
 ```text
-8.7.2  →  8.7.2/
-8.7.4  →  8.7.4/
-8.7.7  →  8.7.7/
-8.x.x  →  8.x.x/
+接口
+请求参数
+加密算法
+签名算法
+数据结构
+服务端校验逻辑
 ```
 
-不同客户端版本之间可能存在：
+等变化。
 
-```text
-Class
-Method
-Field
-Package
-Runtime Logic
-```
-
-等差异。
-
-因此模块按照客户端版本独立维护，避免不同版本之间的 Hook 逻辑互相影响。
-
-请尽量使用与目标客户端版本一致的模块。
+因此各版本协议独立维护，请根据实际客户端版本选择对应目录。
 
 ---
 
-## LSPosed Hook
+## 技术方向
 
-本项目目前主要维护：
-
-```text
-Android Device / Emulator
-        │
-        ├── Root
-        │
-        └── LSPosed
-                │
-                ▼
-           Hook Module
-                │
-                ▼
-          Target Process
-```
-
-模块主要服务于：
+本项目主要涉及：
 
 ```text
-Android Dynamic Analysis
-Runtime Observation
-Hook Research
-Application Security Research
-```
-
-具体 Hook 内容、兼容版本及使用方式请以对应版本目录中的代码及 Release 说明为准。
-
----
-
-## 使用环境
-
-推荐环境：
-
-```text
-Android Emulator
-Root
-LSPosed
-```
-
-部分环境可能使用：
-
-```text
-Magisk
-Kitsune Mask
-```
-
-具体 Root 方案及 Android 版本不做统一限制，以对应模块实际兼容情况为准。
-
----
-
-## 使用方式
-
-一般使用流程：
-
-```text
-安装目标客户端
+Android Reverse Engineering
         ↓
-安装对应版本 Hook Module
+Traffic Capture
         ↓
-LSPosed 启用模块
+Protocol Analysis
         ↓
-选择目标应用作用域
+Native / Java Logic Analysis
         ↓
-重启目标应用
+Cryptographic Reconstruction
         ↓
-观察 Hook 运行结果
+Protocol Reconstruction
+        ↓
+Python Implementation
 ```
 
-请注意：
+重点研究客户端与服务端之间的：
 
 ```text
-客户端版本 ≠ 模块版本
+Request
+Response
+Authentication
+Signature
+Encryption
+Data Structure
+Protocol Flow
 ```
 
-并不代表可以跨版本直接使用。
-
-如果模块无法正常工作，请首先确认：
-
-```text
-App Version
-Android Version
-Root Environment
-LSPosed Version
-Module Version
-```
+等内容。
 
 ---
 
-## 逆向研究流程
+## 版本说明
 
-本项目相关模块通常来源于以下研究流程：
+### 8.7.7
 
-```text
-Android APK
-    │
-    ▼
-Static Analysis
-    │
-    ▼
-Dynamic Analysis
-    │
-    ▼
-Runtime Observation
-    │
-    ▼
-Hook Point
-    │
-    ▼
-Module Implementation
-    │
-    ▼
-Version Verification
-```
+当前维护版本。
 
-尽可能将具体研究内容拆分为：
+主要用于跟进闪动校园 8.7.7 客户端的协议变化。
 
-```text
-Target Class
-Target Method
-Hook Logic
-Runtime Data
-Version Compatibility
-```
+### 8.7.4
 
-减少不同版本之间的耦合。
+闪动校园 8.7.4 协议实现。
+
+### 8.7.2
+
+闪动校园 8.7.2 协议实现。
 
 ---
 
-## 隐私与数据安全
+## 使用说明
 
-请 **不要** 将真实用户敏感信息提交到公开仓库。
+各版本协议实现均尽量保持独立。
 
-包括但不限于：
+使用前请进入对应版本目录：
 
-```text
-手机号
-密码
-Token
-Cookie
-Session
-Device ID
-Android ID
-IMEI
-OAID
-真实姓名
-学校账号
-真实 GPS 数据
-个人运动数据
+```bash
+cd 8.7.7
 ```
 
-运行过程中产生的：
+具体运行方式、依赖及参数说明以对应版本目录中的代码为准。
 
-```text
-Debug Log
-Screenshot
-配置文件
-设备参数
-账号信息
-```
-
-应尽量只保存在本地。
-
-提交以下内容之前：
-
-```text
-Issue
-Pull Request
-Debug Log
-Screenshot
-```
-
-请自行检查并删除其中可能存在的个人信息、认证信息及设备标识。
-
----
-
-## Issue / Pull Request
-
-欢迎提交：
-
-```text
-Bug Report
-Version Compatibility
-Hook Research
-Code Improvement
-Documentation
-Reverse Engineering Research
-```
-
-如果模块无法正常工作，建议至少提供：
-
-```text
-App Version
-Android Version
-LSPosed Version
-Module Version
-Error Message
-Relevant Log
-Minimal Reproduction
-```
-
-请不要在 Issue 中公开：
-
-```text
-账号
-密码
-Token
-Cookie
-Session
-个人身份信息
-设备唯一标识
-```
+请勿直接将不同版本的协议代码混合使用。
 
 ---
 
 # 免责声明与使用限制
 
-> **重要提示：** 在使用、复制、修改或分发本仓库中的任何代码、模块或文档前，请务必仔细阅读以下内容。
+> **重要提示：在使用、复制、修改或分发本仓库中的任何代码、模块或文档前，请务必仔细阅读以下内容。**
 
 ## 核心声明
 
 ```text
-1. 本项目仅维护 Android 模拟器 / Root 环境下的 LSPosed Hook 模块
-2. 早期 Python 网络协议部分已经移除，不再维护
-3. 严禁利用本项目进行商业接单、有偿代跑、倒卖或付费引流
-4. 官方联系后将第一时间停止维护，并归档或下架仓库
+1. 本项目仅面向 Android 逆向与网络协议工程化研究
+2. 各客户端版本独立归档维护，用于协议演进与技术研究
+3. 严禁任何形式的商业接单、有偿代跑与倒卖引流
+4. 官方联系后将第一时间无条件停止维护并归档或下架仓库
 ```
 
 ---
@@ -369,31 +162,33 @@ Session
 
 ### 1. 维护方向
 
-本仓库已经移除早期脱离 Android 客户端运行的网络协议部分。
-
-目前及后续仅维护：
+本仓库主要维护：
 
 ```text
 Android Reverse Engineering
-Android Emulator Analysis
-LSPosed / Xposed Hook
+Network Protocol Analysis
+Protocol Reconstruction
+Cryptographic Algorithm Reconstruction
+Python Protocol Engineering
 Mobile Application Security Research
 ```
 
-不再提供早期 Python 协议部分的更新、适配及技术支持。
+项目仅作为技术研究与学习用途，不以提供商业化服务为目的。
 
-### 2. 研究目的
+### 2. 授权环境限制
 
-本项目仅用于：
+本项目仅限在：
 
 ```text
-Android 逆向技术学习
-动态 Hook 技术研究
-模拟器环境分析
-移动应用安全研究
+本人合法所有的设备
+本人账号
+本地模拟器
+已获得明确授权的测试环境
 ```
 
-本项目仅限在本人合法所有的设备、本地模拟器或已经获得明确授权的测试环境中使用。
+中用于技术研究。
+
+请勿在未经授权的第三方账号、设备或系统中使用。
 
 ---
 
@@ -403,28 +198,28 @@ Android 逆向技术学习
 
 严禁任何个人、团队、工作室或组织利用本项目，包括但不限于：
 
+- 源码
+- 修改版本
+- 衍生版本
+- 编译产物
+
+进行：
+
 ```text
-源码
-编译后的 APK
-修改版本
-衍生版本
+商业接单
+收费代跑
+按次收费
+包月收费
+倒卖源码
+倒卖程序
+付费引流
+建立收费群
+付费教程捆绑
 ```
 
-进行以下行为：
+等直接或间接的商业牟利行为。
 
-- 商业接单
-- 收费代跑
-- 按次收费
-- 包月收费
-- 商业代运营
-- 倒卖源码
-- 倒卖编译产物
-- 付费引流
-- 建立收费群
-- 付费教程捆绑
-- 其他直接或间接的商业牟利行为
-
-对于违反上述使用限制的行为，均属于使用者个人行为，与本项目作者无关。
+对于违反上述限制的行为，均属于使用者个人行为，与本项目作者无关。
 
 由此产生的法律纠纷、账号问题、经济损失及其他责任，由实际使用者自行承担。
 
@@ -432,7 +227,7 @@ Android 逆向技术学习
 
 ## 三、官方联系与停更机制
 
-本项目旨在进行 Android 逆向与 Hook 技术研究，无意破坏目标软件的正常业务运营秩序。
+本项目旨在进行客户端逆向与网络协议工程化研究，无意破坏目标软件的正常业务运营秩序。
 
 本项目尊重目标软件开发团队及相关权利人的：
 
@@ -456,7 +251,7 @@ Android 逆向技术学习
 归档或下架仓库
 ```
 
-本人将第一时间无条件配合。
+本人将第一时间配合。
 
 ---
 
@@ -470,7 +265,7 @@ Android 逆向技术学习
 所在国家或地区法律法规
 所在高校规章制度
 目标软件用户协议
-目标环境授权范围
+实际测试环境授权范围
 ```
 
 ### 禁止滥用
@@ -488,7 +283,7 @@ Android 逆向技术学习
 
 ### 风险自担
 
-本项目按：
+本项目按照：
 
 ```text
 AS-IS
@@ -499,10 +294,10 @@ AS-IS
 使用者应自行承担因下载、安装、使用、修改或分发本项目产生的一切风险，包括但不限于：
 
 ```text
-客户端闪退
+客户端异常
 数据异常
+账号限制
 账号封禁
-设备异常
 校规处分
 经济损失
 法律责任
@@ -514,12 +309,12 @@ AS-IS
 
 # 赞赏与感谢
 
-开源项目的持续研究与维护离不开社区朋友的鼓励。
+感谢所有关注、使用、测试及反馈本项目的朋友。
 
 特别感谢：
 
-| 赞赏者 | 致谢说明 |
-| :---: | :---: |
+| 赞赏者 | 致谢 |
+| :---: | :--- |
 | **VXiok** | 感谢对本项目的赞赏与支持 |
 
 也感谢所有提交 Issue、Pull Request、测试反馈及技术交流的朋友。
@@ -536,9 +331,9 @@ hang666 / JustTrustMePro
 
 感谢原作者开源的优秀工具。
 
-本项目早期 Android 动态调试与 HTTPS Certificate Pinning 分析过程中，曾参考或使用相关工具辅助研究。
+本项目在 Android 动态调试及 HTTPS Certificate Pinning 分析过程中，曾参考或使用相关工具辅助研究。
 
-其相关版权及源代码归原作者所有。
+相关版权及源代码归原作者所有。
 
 本仓库不包含其源代码。
 
@@ -546,20 +341,10 @@ hang666 / JustTrustMePro
 
 # License
 
-本项目的许可证文件见：
+本项目许可证详见：
 
 ```text
 LICENSE
 ```
 
-具体许可条款请以仓库中的 LICENSE 文件为准。
-
----
-
-<p align="center">
-  <b>Android Reverse Engineering · LSPosed · Mobile Security Research</b>
-</p>
-
-<p align="center">
-  Telegram Channel · Telegram Group · GitHub Issues
-</p>
+具体许可条款以仓库中的 LICENSE 文件为准。
