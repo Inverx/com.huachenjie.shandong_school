@@ -1,11 +1,11 @@
-# 闪动校园协议工程
+# 闪动校园 Android Hook 工程
 
 <p align="center">
-  <b>Shandong School · Android Protocol Analysis & Reverse Engineering</b>
+  <b>Shandong School · Android Reverse Engineering & LSPosed Hook</b>
 </p>
 
 <p align="center">
-  面向「闪动校园」Android 客户端的协议分析、逆向研究与工程化实现。
+  面向「闪动校园」Android 客户端的逆向分析、模拟器环境研究与 LSPosed Hook 模块。
 </p>
 
 ---
@@ -14,65 +14,74 @@
 
 > 项目更新、版本适配及相关通知优先通过 Telegram 发布。
 
-###  通知频道
+### 通知频道
 
-**Telegram Channel：**  
-https://t.me/Inverx200
+**Telegram Channel：**
+
+`@Inverx200`
 
 用于发布：
 
 - 项目更新
 - 新版本适配
 - Release 发布
-- 协议变化通知
-- LSPosed 模块更新
+- Hook 模块更新
+- 兼容性变化
 - 重要公告
 
-###  讨论群
+### 讨论群
 
-**Telegram Group：**  
-https://t.me/Inverx501
+**Telegram Group：**
+
+`@Inverx501`
 
 用于：
 
 - 问题交流
 - Bug 反馈
 - Android 逆向讨论
-- 协议分析交流
 - LSPosed / Xposed 相关讨论
+- 模块兼容性交流
 
 也可以直接通过 GitHub Issues 提交可复现的问题。
 
 ---
+
 ## 项目简介
 
-本项目面向 **闪动校园 Android 客户端**，主要用于 Android 逆向、网络协议分析及相关工程化研究。
+本项目面向 **闪动校园 Android 客户端**，主要用于 Android 逆向、模拟器环境分析及 LSPosed Hook 技术研究。
 
-通过对客户端的：
+本项目早期曾包含客户端网络协议分析及 Python 协议实现。
+
+目前已经：
 
 ```text
-静态分析
-    +
-动态调试
-    +
-HTTPS 流量分析
-    +
-请求 / 响应字段对比
-    +
-客户端协议逻辑还原
+移除早期协议部分
+        ↓
+停止维护 Python CLI
+        ↓
+仅保留 Android Hook 相关内容
+        ↓
+按客户端版本独立维护 LSPosed Hook 模块
 ```
 
-逐步还原客户端相关网络通信逻辑，并将部分协议能力重新实现为可独立运行、便于维护和分析的 Python 工具。
-
-项目目前主要包含两部分：
+当前项目主要用于：
 
 ```text
-Protocol CLI
+Android Reverse Engineering
 +
-LSPosed Hook Modules
+Dynamic Analysis
++
+Runtime Observation
++
+LSPosed / Xposed Hook
++
+Android Emulator Research
++
+Version Compatibility Analysis
 ```
 
-其中协议实现按照 **App 客户端版本独立维护**，避免不同版本之间的协议差异互相污染。
+项目不再维护早期脱离 Android 客户端运行的网络协议实现。
 
 ---
 
@@ -81,14 +90,14 @@ LSPosed Hook Modules
 ```text
 com.huachenjie.shandong_school/
 │
-├── 8.6.8/
-│   └── 闪动校园 8.6.8 协议实现
-│
 ├── 8.7.2/
-│   └── 闪动校园 8.7.2 协议实现
+│   └── 闪动校园 8.7.2 Hook 模块
 │
-├── Lsposed-modules-Hook/
-│   └── LSPosed / Xposed Hook 模块相关内容
+├── 8.7.4/
+│   └── 闪动校园 8.7.4 Hook 模块
+│
+├── 8.7.7/
+│   └── 闪动校园 8.7.7 Hook 模块
 │
 ├── LICENSE
 └── README.md
@@ -96,304 +105,43 @@ com.huachenjie.shandong_school/
 
 ### 版本目录
 
-每个版本目录对应一次相对独立的客户端协议分析结果。
+每个版本目录对应一个相对独立的客户端版本。
 
 例如：
 
 ```text
-8.6.8  →  8.6.8/
 8.7.2  →  8.7.2/
+8.7.4  →  8.7.4/
+8.7.7  →  8.7.7/
 8.x.x  →  8.x.x/
 ```
 
-当客户端更新并出现：
+不同客户端版本之间可能存在：
 
 ```text
-API Endpoint
-Request Parameters
-Headers
-Signature
-Encryption
-Device Parameters
-Captcha
-Session
-Protocol Logic
+Class
+Method
+Field
+Package
+Runtime Logic
 ```
 
-等变化时，将优先通过建立新的版本目录进行适配，而不是直接覆盖历史实现。
+等差异。
 
-这样可以保留不同 App 版本之间的协议差异，也方便后续进行版本对比与研究。
+因此模块按照客户端版本独立维护，避免不同版本之间的 Hook 逻辑互相影响。
+
+请尽量使用与目标客户端版本一致的模块。
 
 ---
 
-## 功能
+## LSPosed Hook
 
-不同版本实现可能存在差异，目前项目涉及的主要能力包括：
-
-| 模块 | 功能 |
-|---|---|
-| `login_cli.py` | 登录认证与会话初始化 |
-| `user_cli.py` | 用户信息与账户状态查询 |
-| `fence_cli.py` | 校园电子围栏及相关配置查询 |
-| `record_cli.py` | 运动记录及累计数据查询 |
-| `rank_cli.py` | 校园运动排行榜查询 |
-| `ai_sport_cli.py` | AI 运动项目及历史记录查询 |
-| `run_cli.py` | 运动协议相关数据构造与研究入口 |
-| `client.py` | 统一业务 Client 门面 |
-| `crypto.py` | 签名、AES、MD5 等密码学实现 |
-| `captcha_solver.py` | 验证码图像处理 |
-| `transport.py` | HTTP 请求与网络传输 |
-| `protocol_builder.py` | 坐标、围栏、轨迹及协议数据构造 |
-| `session_store.py` | 本地登录会话管理 |
-
-具体文件及功能请以对应版本目录中的代码为准。
-
----
-
-## 设计思路
-
-项目并不是简单保存某个 HTTP 请求，而是尽可能将客户端网络协议拆分为可维护的工程结构。
-
-```text
-                    Business CLI
-                         │
-                         ▼
-                       Client
-                         │
-        ┌────────────────┼────────────────┐
-        │                │                │
-        ▼                ▼                ▼
- Protocol Builder      Crypto         Session
-        │                │                │
-        └────────────────┼────────────────┘
-                         │
-                         ▼
-                     Transport
-                         │
-                         ▼
-                     Network
-```
-
-业务 CLI 尽量只处理业务入口。
-
-底层公共能力统一负责：
-
-```text
-协议字段构造
-签名
-加解密
-验证码
-Session
-网络传输
-设备上下文
-坐标处理
-运动数据结构
-```
-
-整体遵循：
-
-```text
-一个功能
-   ↓
-一个 CLI
-   ↓
-一个清晰入口
-```
-
-减少重复请求代码、重复签名逻辑以及不同业务模块之间的强耦合。
-
----
-
-## 环境
-
-推荐环境：
-
-```text
-Python 3.10+
-Windows / Linux / macOS
-```
-
-常用 Python 依赖：
-
-```bash
-pip install pycryptodome opencv-python numpy requests
-```
-
-部分研究场景可能还需要：
-
-```text
-ADB
-Android 真机 / 模拟器
-Root
-LSPosed / Xposed
-```
-
-具体环境要求请以对应版本代码为准。
-
----
-
-# 快速开始
-
-## 1. Clone
-
-```bash
-git clone https://github.com/Inverx/com.huachenjie.shandong_school.git
-```
-
-进入项目：
-
-```bash
-cd com.huachenjie.shandong_school
-```
-
----
-
-## 2. 选择客户端版本
-
-例如：
-
-```bash
-cd 8.7.2
-```
-
-请尽量选择与目标客户端一致的版本目录。
-
----
-
-## 3. 登录
-
-```bash
-python login_cli.py
-```
-
-部分版本支持：
-
-```bash
-python login_cli.py -p 手机号
-```
-
-具体参数：
-
-```bash
-python login_cli.py --help
-```
-
----
-
-## 4. 用户信息
-
-```bash
-python user_cli.py
-```
-
----
-
-## 5. 校园围栏
-
-```bash
-python fence_cli.py
-```
-
----
-
-## 6. 运动记录
-
-汇总信息：
-
-```bash
-python record_cli.py -t summary
-```
-
-阳光跑：
-
-```bash
-python record_cli.py -t sun -p 1
-```
-
-自由跑：
-
-```bash
-python record_cli.py -t free -p 1
-```
-
----
-
-## 7. 排行榜
-
-例如：
-
-```bash
-python rank_cli.py -t distance -s 2
-```
-
-或：
-
-```bash
-python rank_cli.py -t progress -s 1
-```
-
----
-
-## 8. AI 运动
-
-查询项目：
-
-```bash
-python ai_sport_cli.py -t categories
-```
-
-查询历史记录：
-
-```bash
-python ai_sport_cli.py -t records -p 1
-```
-
----
-
-## 9. 运动协议
-
-```bash
-python run_cli.py
-```
-
-部分版本支持通过 CLI 指定协议参数。
-
-例如：
-
-```bash
-python run_cli.py -d 2200 -p 320
-```
-
-不同版本参数可能发生变化，请优先查看：
-
-```bash
-python run_cli.py --help
-```
-
-以及对应版本源码。
-
----
-
-# LSPosed Hook Modules
-
-仓库同时维护：
-
-```text
-Lsposed-modules-Hook/
-```
-
-用于存放与本项目研究相关的 **LSPosed / Xposed Hook 模块**。
-
-这部分主要服务于 Android 动态分析、调试及协议研究场景。
-
-典型环境：
+本项目目前主要维护：
 
 ```text
 Android Device / Emulator
         │
         ├── Root
-        │
-        ├── Magisk / Kitsune Mask
         │
         └── LSPosed
                 │
@@ -404,64 +152,81 @@ Android Device / Emulator
           Target Process
 ```
 
-模块的：
+模块主要服务于：
 
 ```text
-APK
-Version
-Target App Version
-Compatibility
-Usage
+Android Dynamic Analysis
+Runtime Observation
+Hook Research
+Application Security Research
 ```
 
-请以对应目录及 GitHub Releases 中的说明为准。
+具体 Hook 内容、兼容版本及使用方式请以对应版本目录中的代码及 Release 说明为准。
 
 ---
 
-# HTTPS 流量分析
+## 使用环境
 
-部分 Android 网络请求可能存在：
-
-```text
-SSL Certificate Pinning
-```
-
-等证书校验机制。
-
-在授权研究环境中，可以结合：
+推荐环境：
 
 ```text
-Android Device / Emulator
-        │
-        ├── Root
-        ├── LSPosed / Xposed
-        └── SSL Pinning Research Module
-                    │
-                    ▼
-                HTTPS Proxy
-                    │
-                    ▼
-            Request / Response
-                    │
-                    ▼
-             Protocol Analysis
+Android Emulator
+Root
+LSPosed
 ```
 
-进行客户端网络通信分析。
+部分环境可能使用：
 
-本项目研究过程中曾使用：
+```text
+Magisk
+Kitsune Mask
+```
 
-**hang666 / JustTrustMePro**
-
-辅助分析 Android SSL Certificate Pinning。
-
-相关项目版权及源代码归原作者所有，本仓库不包含其源代码或 APK。
+具体 Root 方案及 Android 版本不做统一限制，以对应模块实际兼容情况为准。
 
 ---
 
-# 协议分析流程
+## 使用方式
 
-项目中协议实现通常来源于以下分析流程：
+一般使用流程：
+
+```text
+安装目标客户端
+        ↓
+安装对应版本 Hook Module
+        ↓
+LSPosed 启用模块
+        ↓
+选择目标应用作用域
+        ↓
+重启目标应用
+        ↓
+观察 Hook 运行结果
+```
+
+请注意：
+
+```text
+客户端版本 ≠ 模块版本
+```
+
+并不代表可以跨版本直接使用。
+
+如果模块无法正常工作，请首先确认：
+
+```text
+App Version
+Android Version
+Root Environment
+LSPosed Version
+Module Version
+```
+
+---
+
+## 逆向研究流程
+
+本项目相关模块通常来源于以下研究流程：
 
 ```text
 Android APK
@@ -473,93 +238,33 @@ Static Analysis
 Dynamic Analysis
     │
     ▼
-Network Traffic
+Runtime Observation
     │
     ▼
-Request / Response
+Hook Point
     │
     ▼
-Signature / Encryption
+Module Implementation
     │
     ▼
-Application Logic
-    │
-    ▼
-Protocol Reconstruction
-    │
-    ▼
-Python Implementation
+Version Verification
 ```
 
-最终尽可能将：
+尽可能将具体研究内容拆分为：
 
 ```text
-Request
-Signature
-Encryption
-Captcha
-Session
-Device Context
-Coordinate
-Protocol Data
+Target Class
+Target Method
+Hook Logic
+Runtime Data
+Version Compatibility
 ```
 
-拆分并重新实现为相互独立的模块。
+减少不同版本之间的耦合。
 
 ---
 
-# 验证码
-
-部分认证流程可能包含滑块等人机验证机制。
-
-相关版本中可能存在：
-
-```text
-captcha_solver.py
-```
-
-用于验证码图像分析。
-
-部分实现涉及：
-
-```text
-OpenCV
-Canny Edge
-Template Matching
-Contour Matching
-```
-
-验证码处理作为独立适配层存在，避免与核心业务代码强耦合。
-
----
-
-# 坐标与电子围栏
-
-涉及校园运动协议研究时，需要处理客户端中的坐标及电子围栏数据。
-
-相关逻辑通常集中在：
-
-```text
-protocol_builder.py
-```
-
-包括：
-
-```text
-Coordinate Validation
-Polygon Fence
-Point In Polygon
-GPS Point
-Distance
-Pace
-Track Segment
-```
-
-坐标尽量通过统一数据结构进行校验与传递，避免不同业务模块分别维护相同逻辑。
-
----
-
-# 隐私与数据安全
+## 隐私与数据安全
 
 请 **不要** 将真实用户敏感信息提交到公开仓库。
 
@@ -577,11 +282,21 @@ IMEI
 OAID
 真实姓名
 学校账号
-真实 GPS 轨迹
+真实 GPS 数据
 个人运动数据
 ```
 
-运行过程中生成的账号、Session、设备参数及调试信息应尽量只保存在本地。
+运行过程中产生的：
+
+```text
+Debug Log
+Screenshot
+配置文件
+设备参数
+账号信息
+```
+
+应尽量只保存在本地。
 
 提交以下内容之前：
 
@@ -590,34 +305,34 @@ Issue
 Pull Request
 Debug Log
 Screenshot
-HAR
-抓包文件
 ```
 
 请自行检查并删除其中可能存在的个人信息、认证信息及设备标识。
 
 ---
 
-# Issue / Pull Request
+## Issue / Pull Request
 
 欢迎提交：
 
 ```text
 Bug Report
-Protocol Change
 Version Compatibility
+Hook Research
 Code Improvement
 Documentation
 Reverse Engineering Research
 ```
 
-如果客户端更新导致协议失效，建议 Issue 中至少提供：
+如果模块无法正常工作，建议至少提供：
 
 ```text
 App Version
 Android Version
-Python Version
+LSPosed Version
+Module Version
 Error Message
+Relevant Log
 Minimal Reproduction
 ```
 
@@ -628,85 +343,223 @@ Minimal Reproduction
 密码
 Token
 Cookie
-完整 Session
+Session
 个人身份信息
+设备唯一标识
 ```
 
 ---
 
-# Telegram
+# 免责声明与使用限制
 
-项目更新：
+> **重要提示：** 在使用、复制、修改或分发本仓库中的任何代码、模块或文档前，请务必仔细阅读以下内容。
 
-**https://t.me/Inverx200**
+## 核心声明
 
-技术讨论：
-
-**https://t.me/Inverx501**
-
-如果发现新版本协议变化、兼容性问题或项目 Bug，也可以通过 GitHub Issues 反馈。
+```text
+1. 本项目仅维护 Android 模拟器 / Root 环境下的 LSPosed Hook 模块
+2. 早期 Python 网络协议部分已经移除，不再维护
+3. 严禁利用本项目进行商业接单、有偿代跑、倒卖或付费引流
+4. 官方联系后将第一时间停止维护，并归档或下架仓库
+```
 
 ---
 
-# Research & Disclaimer
+## 一、项目维护与研究范围
 
-本项目主要用于：
+### 1. 维护方向
+
+本仓库已经移除早期脱离 Android 客户端运行的网络协议部分。
+
+目前及后续仅维护：
 
 ```text
 Android Reverse Engineering
-Network Protocol Analysis
-Python Protocol Engineering
-Application Security Research
-Android HTTPS Traffic Analysis
-LSPosed / Xposed Research
+Android Emulator Analysis
+LSPosed / Xposed Hook
+Mobile Application Security Research
 ```
 
-以及本人设备、本人账号或获得明确授权环境中的安全研究与技术学习。
+不再提供早期 Python 协议部分的更新、适配及技术支持。
 
-请遵守所在地法律法规、目标服务的相关规则及授权范围。
+### 2. 研究目的
 
-请勿将本项目用于未经授权的账号访问、数据获取、系统操作或其他侵犯第三方权益的行为。
+本项目仅用于：
 
-使用者应自行承担因使用、修改或分发本项目所产生的责任。
+```text
+Android 逆向技术学习
+动态 Hook 技术研究
+模拟器环境分析
+移动应用安全研究
+```
+
+本项目仅限在本人合法所有的设备、本地模拟器或已经获得明确授权的测试环境中使用。
+
+---
+
+## 二、严禁商业接单与非法牟利
+
+本项目为免费开源的技术研究项目。
+
+严禁任何个人、团队、工作室或组织利用本项目，包括但不限于：
+
+```text
+源码
+编译后的 APK
+修改版本
+衍生版本
+```
+
+进行以下行为：
+
+- 商业接单
+- 收费代跑
+- 按次收费
+- 包月收费
+- 商业代运营
+- 倒卖源码
+- 倒卖编译产物
+- 付费引流
+- 建立收费群
+- 付费教程捆绑
+- 其他直接或间接的商业牟利行为
+
+对于违反上述使用限制的行为，均属于使用者个人行为，与本项目作者无关。
+
+由此产生的法律纠纷、账号问题、经济损失及其他责任，由实际使用者自行承担。
+
+---
+
+## 三、官方联系与停更机制
+
+本项目旨在进行 Android 逆向与 Hook 技术研究，无意破坏目标软件的正常业务运营秩序。
+
+本项目尊重目标软件开发团队及相关权利人的：
+
+```text
+知识产权
+合法权益
+正常运营
+```
+
+如果软件官方或相关权利人认为本项目的存在对软件正常运营产生不当影响，并与本人取得联系：
+
+```text
+收到通知
+    ↓
+停止维护
+    ↓
+停止版本适配
+    ↓
+停止 Release 更新
+    ↓
+归档或下架仓库
+```
+
+本人将第一时间无条件配合。
+
+---
+
+## 四、免责条款
+
+### 合规使用
+
+使用者必须自行遵守：
+
+```text
+所在国家或地区法律法规
+所在高校规章制度
+目标软件用户协议
+目标环境授权范围
+```
+
+### 禁止滥用
+
+严禁将本项目用于：
+
+```text
+未经授权访问他人账号
+未经授权获取他人数据
+破坏计算机信息系统
+干扰目标服务器正常运行
+侵犯第三方合法权益
+其他违法或违规行为
+```
+
+### 风险自担
+
+本项目按：
+
+```text
+AS-IS
+```
+
+形式提供，不附带任何明示或暗示的担保。
+
+使用者应自行承担因下载、安装、使用、修改或分发本项目产生的一切风险，包括但不限于：
+
+```text
+客户端闪退
+数据异常
+账号封禁
+设备异常
+校规处分
+经济损失
+法律责任
+```
+
+本项目作者及贡献者不对因使用本项目产生的任何直接或间接损失承担责任。
+
+---
+
+# 赞赏与感谢
+
+开源项目的持续研究与维护离不开社区朋友的鼓励。
+
+特别感谢：
+
+| 赞赏者 | 致谢说明 |
+| :---: | :---: |
+| **VXiok** | 感谢对本项目的赞赏与支持 |
+
+也感谢所有提交 Issue、Pull Request、测试反馈及技术交流的朋友。
 
 ---
 
 # Credits
 
-### JustTrustMePro
-
-感谢：
+## JustTrustMePro
 
 ```text
 hang666 / JustTrustMePro
 ```
 
-本项目在 Android HTTPS 协议分析过程中参考或使用相关工具辅助研究 SSL Certificate Pinning。
+感谢原作者开源的优秀工具。
 
-其版权及源代码归原作者所有。
+本项目早期 Android 动态调试与 HTTPS Certificate Pinning 分析过程中，曾参考或使用相关工具辅助研究。
+
+其相关版权及源代码归原作者所有。
+
+本仓库不包含其源代码。
 
 ---
 
 # License
 
-本项目基于 **MIT License** 开源。
-
-详见：
+本项目的许可证文件见：
 
 ```text
 LICENSE
 ```
 
+具体许可条款请以仓库中的 LICENSE 文件为准。
+
 ---
 
 <p align="center">
-  <b>Android Reverse Engineering · Protocol Analysis · LSPosed</b>
+  <b>Android Reverse Engineering · LSPosed · Mobile Security Research</b>
 </p>
 
 <p align="center">
-  <a href="https://t.me/Inverx200">Telegram Channel</a>
-  ·
-  <a href="https://t.me/Inverx501">Telegram Group</a>
-  ·
-  <a href="https://github.com/Inverx/com.huachenjie.shandong_school/issues">Issues</a>
+  Telegram Channel · Telegram Group · GitHub Issues
 </p>
