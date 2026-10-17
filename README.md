@@ -21,10 +21,13 @@ Android Reverse Engineering
 Network Protocol Analysis
 Protocol Reconstruction
 Cryptographic Algorithm Analysis
+Device Identifier Analysis
 Python Protocol Implementation
 ```
 
 项目按照客户端版本独立维护，不同版本之间尽量保持解耦，主要用于协议分析、版本差异研究及相关技术交流。
+
+历史模块方向属于早期探索内容，后续不再维护、更新或适配。当前仓库仅维护协议实现及相关研究内容。
 
 当前版本：
 
@@ -63,6 +66,7 @@ com.huachenjie.shandong_school/
 请求参数
 加密算法
 签名算法
+设备标识
 数据结构
 服务端校验逻辑
 ```
@@ -84,6 +88,8 @@ Traffic Capture
         ↓
 Protocol Analysis
         ↓
+Device Identifier Analysis
+        ↓
 Native / Java Logic Analysis
         ↓
 Cryptographic Reconstruction
@@ -99,6 +105,7 @@ Python Implementation
 Request
 Response
 Authentication
+Device Identifier
 Signature
 Encryption
 Data Structure
@@ -106,6 +113,26 @@ Protocol Flow
 ```
 
 等内容。
+
+---
+
+## 设备标识采集
+
+### 非 Root Android 设备
+
+通过修改闪动校园客户端测试包，在非 Root Android 设备上采集和观察客户端实际使用的设备标识。
+
+主要研究内容：
+
+- 客户端设备标识的采集与分析
+- 设备标识相关字段的来源及使用方式
+- 客户端设备标识与协议请求字段的关联
+- 客户端身份信息与协议调试记录的一致性核对
+- 不同客户端版本之间的设备标识差异
+
+相关数据可用于授权测试环境下的客户端分析，辅助核对协议请求所使用的账号身份与客户端侧身份信息之间的对应关系。
+
+**说明：** 设备标识与账号身份并非完全等价。设备标识一致不代表服务端一定将请求识别为同一账号，实际结果还可能受到认证凭证、会话状态、客户端版本及服务端校验策略等因素影响。
 
 ---
 
@@ -145,15 +172,16 @@ cd 8.7.7
 
 # 免责声明与使用限制
 
-> **重要提示：在使用、复制、修改或分发本仓库中的任何代码、模块或文档前，请务必仔细阅读以下内容。**
+> **重要提示：在使用、复制、修改或分发本仓库中的任何代码或文档前，请务必仔细阅读以下内容。**
 
 ## 核心声明
 
 ```text
-1. 本项目仅面向 Android 逆向与网络协议工程化研究
-2. 各客户端版本独立归档维护，用于协议演进与技术研究
-3. 严禁任何形式的商业接单、有偿代跑与倒卖引流
-4. 官方联系后将第一时间无条件停止维护并归档或下架仓库
+1. 本项目面向 Android 逆向与网络协议工程化研究
+2. 各客户端版本独立维护，用于协议演进与技术研究
+3. 历史模块方向不再维护，后续仅维护协议实现
+4. 严禁利用本项目进行商业接单、有偿代跑与倒卖牟利
+5. 官方联系后将第一时间停止维护并归档或下架仓库
 ```
 
 ---
@@ -168,16 +196,19 @@ cd 8.7.7
 Android Reverse Engineering
 Network Protocol Analysis
 Protocol Reconstruction
-Cryptographic Algorithm Reconstruction
+Cryptographic Algorithm Analysis
+Device Identifier Analysis
 Python Protocol Engineering
 Mobile Application Security Research
 ```
 
-项目仅作为技术研究与学习用途，不以提供商业化服务为目的。
+项目仅用于技术研究与学习，不以提供商业化服务为目的。
+
+历史模块方向不属于当前维护范围，后续不再进行相关更新、适配或维护。
 
 ### 2. 授权环境限制
 
-本项目仅限在：
+本项目仅限在以下环境中用于技术研究：
 
 ```text
 本人合法所有的设备
@@ -185,8 +216,6 @@ Mobile Application Security Research
 本地模拟器
 已获得明确授权的测试环境
 ```
-
-中用于技术研究。
 
 请勿在未经授权的第三方账号、设备或系统中使用。
 
@@ -219,15 +248,13 @@ Mobile Application Security Research
 
 等直接或间接的商业牟利行为。
 
-对于违反上述限制的行为，均属于使用者个人行为，与本项目作者无关。
-
-由此产生的法律纠纷、账号问题、经济损失及其他责任，由实际使用者自行承担。
+上述限制体现项目作者的使用立场。实际使用者仍须遵守适用法律法规、相关协议及许可证条款。
 
 ---
 
 ## 三、官方联系与停更机制
 
-本项目旨在进行客户端逆向与网络协议工程化研究，无意破坏目标软件的正常业务运营秩序。
+本项目旨在进行客户端逆向与网络协议工程化研究，无意侵犯目标软件开发团队及相关权利人的合法权益。
 
 本项目尊重目标软件开发团队及相关权利人的：
 
@@ -237,10 +264,12 @@ Mobile Application Security Research
 正常运营
 ```
 
-如果软件官方或相关权利人认为本项目的存在对软件正常运营产生不当影响，并与本人取得联系：
+如果软件官方或相关权利人就项目内容提出合理的权利主张，并与本人取得联系：
 
 ```text
 收到通知
+    ↓
+核实相关情况
     ↓
 停止维护
     ↓
@@ -248,10 +277,10 @@ Mobile Application Security Research
     ↓
 停止 Release 更新
     ↓
-归档或下架仓库
+根据实际情况归档或下架仓库
 ```
 
-本人将第一时间配合。
+本人将第一时间配合处理。
 
 ---
 
@@ -291,7 +320,7 @@ AS-IS
 
 形式提供，不附带任何明示或暗示的担保。
 
-使用者应自行承担因下载、安装、使用、修改或分发本项目产生的一切风险，包括但不限于：
+使用者应自行承担因下载、安装、使用、修改或分发本项目产生的风险，包括但不限于：
 
 ```text
 客户端异常
@@ -303,7 +332,7 @@ AS-IS
 法律责任
 ```
 
-本项目作者及贡献者不对因使用本项目产生的任何直接或间接损失承担责任。
+本项目作者及贡献者不对因使用本项目产生的直接或间接损失承担责任。上述声明不排除法律规定不得排除或限制的责任。
 
 ---
 
@@ -317,7 +346,7 @@ AS-IS
 | :---: | :--- |
 | **VXiok** | 感谢对本项目的赞赏与支持 |
 
-也感谢所有提交 Issue、Pull Request、测试反馈及技术交流的朋友。
+也感谢所有提交 Issue、Pull Request、测试反馈及参与技术交流的朋友。
 
 ---
 
