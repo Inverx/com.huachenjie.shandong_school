@@ -1,2 +1,4 @@
 设备采集-Android-保证协议设备一致/闪动校园_8.7.7.apk filter=lfs diff=lfs merge=lfs -text
 设备采集-Android-保证协议设备一致/*.apk filter=lfs diff=lfs merge=lfs -text
+闪动校园pro2.0.9-FridaDump/** filter=lfs diff=lfs merge=lfs -text
+闪动校园8.7.7-FridaDump/** filter=lfs diff=lfs merge=lfs -text
